@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "30.2.0";
+  version = "31.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7kcDWfw4M7boe0ABO4ob1d+XO1YxS924mtGETvHoNf0=";
+    sha256 = "sha256-iX7HjsbW9rUgG35XalqfXh2+89vEiwish90FGOpkzRo=";
   };
 
   postPatch = ''
@@ -57,7 +57,10 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # chinese character translates different into latin
+    "test_safe_path_posix_style_chinese_char"
+  ] ++ lib.optionals stdenv.isDarwin [
     # expected result is tailored towards the quirks of upstream's
     # CI environment on darwin
     "test_searchable_paths"
