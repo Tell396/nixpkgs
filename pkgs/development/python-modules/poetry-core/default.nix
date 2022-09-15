@@ -5,10 +5,10 @@
 , build
 , git
 , importlib-metadata
-, intreehooks
 , pep517
 , pytest-mock
 , pytestCheckHook
+, setuptools
 , tomlkit
 , virtualenv
 }:
@@ -26,17 +26,6 @@ buildPythonPackage rec {
     sha256 = "sha256-WUgBrO9h1E7N2SVFD47UPv39DMx1yQviV5tcNPmR+/g=";
   };
 
-  postPatch = lib.optionalString (pythonOlder "3.8") ''
-    # remove >1.0.3
-    substituteInPlace pyproject.toml \
-      --replace 'importlib-metadata = {version = "^1.7.0", python = "~2.7 || >=3.5, <3.8"}' \
-        'importlib-metadata = {version = ">=1.7.0", python = "~2.7 || >=3.5, <3.8"}'
-  '';
-
-  nativeBuildInputs = [
-    intreehooks
-  ];
-
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
@@ -47,6 +36,7 @@ buildPythonPackage rec {
     pep517
     pytest-mock
     pytestCheckHook
+    setuptools
     tomlkit
     virtualenv
   ];
